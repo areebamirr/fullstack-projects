@@ -15,6 +15,7 @@ const connectToSocket = (server) => {
         }
     });
     io.on("connection", (socket)=>{
+        console.log("Something  Connected")
         socket.on("accept-call", (path)=>{
             if(connections[path] === undefined){
                 connections[path] = []
@@ -31,7 +32,7 @@ const connectToSocket = (server) => {
             }
             if(message[path] !== undefined){
                 for(let a = 0; a < message[path].length; ++a){
-                    io.to(socket.id).emit("chat-message", message[ppath][a]['data'], message[path][a]['sender'], messages[path][a]['socket-id-sender'])
+                    io.to(socket.id).emit("chat-message", message[path][a]['data'], message[path][a]['sender'], messages[path][a]['socket-id-sender'])
                 }
             }
         });
@@ -71,9 +72,9 @@ const connectToSocket = (server) => {
                         }
                         var index = connections[key].indexOf(socket.id)
 
-                        connection[key].splice(index, 1)
+                        connections[key].splice(index, 1)
 
-                        if(connection[key].length === 0){
+                        if(connections[key].length === 0){
                             delete connections[key];
                         }
                     }

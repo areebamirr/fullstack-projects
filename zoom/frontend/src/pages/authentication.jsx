@@ -29,12 +29,12 @@ export default function Authentication() {
   const [message, setMessage] = React.useState();
   const [open, setOpen] = React.useState(false);
 
-  const {handleLogin, handleRegister} = React.useContext(AuthContext);
+  const { handleRegister, handleLogin } = React.useContext(AuthContext);
 
   let handleAuth = async()=>{
     try{
       if(formState === 0){
-        
+        let result = await handleLogin(username, Password);
       }
       if(formState === 1){
         let result = await handleRegister(name, username, Password);
@@ -46,7 +46,7 @@ export default function Authentication() {
         setPassword("")
       }
     }catch(err){
-      let message = (err.response.data.message);
+      let message = err.response.data.message;
       setError(message);
     }
   }
@@ -130,7 +130,7 @@ export default function Authentication() {
                 autoComplete="current-password"
                 onChange={(e)=>{setPassword(e.target.value)}}
               />
-              <p style={{color:"red"}}>*{error}</p>
+              <p style={{color:"red"}}>{error}</p>
               <Button
                 type="button"
                 fullWidth
@@ -138,7 +138,7 @@ export default function Authentication() {
                 sx={{ mt: 3, mb: 2 }}
                 onClick={handleAuth}
               >
-                {formState === 0 ?  "Login" : "Registrer"}
+                {formState === 0 ?  "Login" : "Register"}
               </Button>
               <Grid container>
                 <Grid item xs>

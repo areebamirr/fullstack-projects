@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios, { HttpStatusCode } from "axios";
 // import {httpStatus} from "http-status"
 
 export const AuthContext = createContext({});
@@ -14,8 +14,6 @@ export const AuthProvider = ({children})=>{
 
     const [userData, setUserData] = useState(authContext);
 
-    const router = useNavigate();
-
     const handleRegister = async (name,username, password)=>{
         try{
             let request = await client.post("/register", {
@@ -23,7 +21,7 @@ export const AuthProvider = ({children})=>{
                 username:username,
                 password:password
             })
-            if(request.status === httpStatus.CREATED){
+            if(request.status === HttpStatusCode.CREATED){
                 return request.data.message;
             }
         }
@@ -38,16 +36,21 @@ export const AuthProvider = ({children})=>{
                 username:username,
                 password:password
             })
-            if(request.status === httpStatus.OK){
+
+            if(request.status === HttpStatusCode.Ok){
                 localStorage.setItem("token", request.data.token);
+                router("/home")
             }
         } catch(err){
+            console.log(err)
             throw err;
         }
     }
 
+    const router = useNavigate();
+    
     const data = {
-        userData, setUserData, handleRegister
+        userData, setUserData, handleRegister, handleLogin  
     }
 
     return(
